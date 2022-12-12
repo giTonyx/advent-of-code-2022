@@ -1,4 +1,5 @@
 import solution
+from collections import deque
 
 
 class Heightmap(object):
@@ -56,25 +57,23 @@ class Cell(object):
         return
 
 
-class VisitMap(object):
-    def __init__(self):
-        self.m = {}
+def find_path(heightmap, start_positions):
+    end_position = heightmap.end_position()
+    to_visit = deque()
+    seen = set()
+    for p in start_positions:
+        to_visit.append((1, p))
+        seen.add(p)
 
-    def add(self, value, weight):
-        self.m[value] = weight
+    while True:
+        steps, position = to_visit.popleft()
 
-    def pop(self):
-        min_weight = min(self.m.values())
-        for k, v in self.m.items():
-            if v == min_weight:
-                min_value = v
-                break
-        del self.m[k]
-        return (k, v)
-
-    def have_already(self, value, weight):
-        if value in self.m and self.m[value] <= weight: return True
-        return False
+        for p in heightmap.adjacent(position):
+            if p == end_position:
+                return steps
+            if p not in seen:
+                to_visit.append((steps + 1, p))
+                seen.add(p)
 
 
 class Solver(solution.Solution):
@@ -86,34 +85,10 @@ class Solver(solution.Solution):
         heightmap = Heightmap(input_data)
 
         start_position = heightmap.start_position()
-        end_position = heightmap.end_position()
-        to_visit = VisitMap()
-        to_visit.add(start_position, 1)
-
-        while True:
-            position, steps = to_visit.pop()
-
-            for p in heightmap.adjacent(position):
-                if p == end_position:
-                    return steps
-                if not to_visit.have_already(p, steps + 1):
-                    to_visit.add(p, steps + 1)
+        return find_path(heightmap, [start_position])
 
     def solve_second(self, input_data):
         heightmap = Heightmap(input_data)
 
         start_positions = heightmap.lowest_positions()
-
-        end_position = heightmap.end_position()
-        to_visit = VisitMap()
-        for start_position in start_positions:
-            to_visit.add(start_position, 1)
-
-        while True:
-            position, steps = to_visit.pop()
-
-            for p in heightmap.adjacent(position):
-                if p == end_position:
-                    return steps
-                if not to_visit.have_already(p, steps + 1):
-                    to_visit.add(p, steps + 1)
+        return find_path(heightmap, start_positions)
