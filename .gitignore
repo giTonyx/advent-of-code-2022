@@ -130,3 +130,6 @@ dmypy.json
 
 # JetBrains
 .idea/
+
+# AoC input files
+input/
