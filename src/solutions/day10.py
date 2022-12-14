@@ -1,4 +1,5 @@
 import solution
+from advent_of_code_ocr import convert_6
 
 class CPU(object):
     def __init__(self):
@@ -45,6 +46,6 @@ class Solver(solution.Solution):
                 crt += "#"
             else:
                 crt += "."
-        for i in range(6):
-            print(crt[i*40:(i+1)*40])
-        return "EKRHEPUZ" # hardcoded as can be seen in console
+            if p == 39:
+                crt += "\n"
+        return convert_6(crt.strip())
