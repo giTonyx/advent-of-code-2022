@@ -1,5 +1,6 @@
 import solution
 import functools
+import json
 
 # return 0 if equal, 1 if left is bigger, -1 if left is smaller
 def compare(left, right):
@@ -34,8 +35,8 @@ class Solver(solution.Solution):
         total = 0
         current_idx = 0
         while (current_idx * 3) < len(input_data):
-            left = eval(input_data[current_idx * 3])
-            right = eval(input_data[(current_idx * 3) + 1])
+            left = json.loads(input_data[current_idx * 3])
+            right = json.loads(input_data[(current_idx * 3) + 1])
             current_idx += 1
 
             if compare(left, right) == -1:
@@ -46,8 +47,8 @@ class Solver(solution.Solution):
         input_array = [[[2]], [[6]]]
         current_idx = 0
         while (current_idx * 3) < len(input_data):
-            left = eval(input_data[current_idx * 3])
-            right = eval(input_data[(current_idx * 3) + 1])
+            left = json.loads(input_data[current_idx * 3])
+            right = json.loads(input_data[(current_idx * 3) + 1])
             input_array.append(left)
             input_array.append(right)
             current_idx += 1
