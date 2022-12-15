@@ -16,5 +16,5 @@ class Solution:
         input_data = self.parse_input(input_filename)
         s1 = self.solve_first(input_data)
         s2 = self.solve_second(input_data)
-        print(f"Solution 1: {s1}")
-        print(f"Solution 2: {s2}")
+        print("Solution 1: " + str(s1))
+        print("Solution 2: " + str(s2))
