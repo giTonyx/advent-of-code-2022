@@ -12,18 +12,34 @@ def extract_coords(input):
     return sx, sy, bx, by
 
 
-def closest_positions(sx, sy, bx, by, yfilter):
-    cells = set()
-    max_distance = abs(sx - bx) + abs(sy - by)
-    ydistance = abs(sy - yfilter)
-    remaining_distance = max_distance - ydistance
-    if remaining_distance < 0:
-        return cells
-    for dx in range(-remaining_distance, remaining_distance + 1):
-        px = sx + dx
-        if px == bx and yfilter == by: continue
-        cells.add((px, yfilter))
-    return cells
+def find_row_len(inputs, beacons, row):
+    beacons = set([x for x, y in beacons if y == row])
+    ranges = []
+    for sx, sy, distance in inputs:
+        remaining = distance - abs(row - sy)
+        if remaining < 1: continue
+        lx = sx - remaining
+        rx = sx + remaining
+        ranges.append((lx, rx))
+    ranges.sort()
+
+    total = 0
+    clx, crx = ranges[0]
+    for lx, rx in ranges[1:]:
+        if lx <= crx:
+            crx = max(crx, rx)
+        else:
+            total += crx - clx + 1
+            for b in beacons:
+                if clx <= b <= crx:
+                    total -= 1
+            clx = lx
+            crx = rx
+    total += crx - clx + 1
+    for b in beacons:
+        if clx <= b <= crx:
+            total -= 1
+    return total
 
 
 def find_hole_in_row(inputs, bounds, row):
@@ -57,12 +73,13 @@ class Solver(solution.Solution):
         return [x.strip() for x in open(input_filename).readlines()]
 
     def solve_first(self, input_data):
-        empty_cells = set()
+        inputs = []
+        beacons = []
         for line in input_data:
             sx, sy, bx, by = extract_coords(line)
-            empty = closest_positions(sx, sy, bx, by, 2000000)
-            empty_cells = empty_cells.union(empty)
-        return len(empty_cells)
+            inputs.append((sx, sy, abs(sx - bx) + abs(sy - by)))
+            beacons.append((bx, by))
+        return find_row_len(inputs, beacons, 2000000)
 
     def solve_second(self, input_data):
         inputs = []
