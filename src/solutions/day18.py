@@ -30,7 +30,6 @@ class Solver(solution.Solution):
             cubes.add((x, y, z))
 
         faces = 0
-        # for each side, we calculate the projections, i.e. how many cubes do we see
         min_coordinate = min([min(x, y, z) for x, y, z in cubes]) - 1
         max_coordinate = max([max(x, y, z) for x, y, z in cubes]) + 1
 
