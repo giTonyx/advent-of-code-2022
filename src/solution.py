@@ -1,3 +1,4 @@
+import time
 class Solution:
 
     def __init__(self):
@@ -14,7 +15,12 @@ class Solution:
 
     def solve(self, input_filename):
         input_data = self.parse_input(input_filename)
+        pre_time = time.time()
         s1 = self.solve_first(input_data)
+        post_time = time.time()
+        print("Solution 1: %s (%.03fs)" % (str(s1), post_time - pre_time))
+
+        pre_time = time.time()
         s2 = self.solve_second(input_data)
-        print("Solution 1: " + str(s1))
-        print("Solution 2: " + str(s2))
+        post_time = time.time()
+        print("Solution 2: %s (%.03fs)" % (str(s2), post_time - pre_time))
